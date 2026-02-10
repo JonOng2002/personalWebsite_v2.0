@@ -1,20 +1,34 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Personal Portfolio Website
 
-# Run and deploy your AI Studio app
+A bento-grid portfolio site built with React + TypeScript + Vite. The layout is component-driven (each “card” is a unit), so new projects/features can be added without redesigning the whole page.
 
-This contains everything you need to run your app locally.
+Live site: jonongca.com
 
-View your app in AI Studio: https://ai.studio/apps/drive/1uNy-wvMOO1wUHyxs_fs0ttVmt4jCVzwX
+## What this project does
+- Renders a bento-style grid of cards for projects, experience, and interactive widgets.
+- Uses a consistent design system (Tailwind + reusable components) for spacing, typography, and dark mode styling.
+- Includes a Spotify widget that shows “Now Playing” (when active) or falls back to “Last Played”.
 
-## Run Locally
+## Spotify widget (how it works)
+The Spotify card reads from serverless API endpoints deployed on Vercel:
+- The frontend polls an API route (e.g. `/api/now-playing`) periodically.
+- The serverless function uses a Spotify refresh token to request an access token and fetch playback state.
+- The UI renders either “Now Playing” (live) or “Last Played” if nothing is currently playing.
 
-**Prerequisites:**  Node.js
+This keeps secrets on the serverless side (client never needs Spotify credentials). 
+## Tech stack
+- React + TypeScript
+- Vite
+- Tailwind CSS
+- Vercel (hosting + serverless functions under `/api`)
+## Local development
+### Prerequisites
+- Node.js
+- Vercel CLI (`npm i -g vercel`)
 
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+### Run locally
+```bash
+git clone <your-repo-url>
+cd <repo-folder>
+npm install
+vercel dev
