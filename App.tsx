@@ -7,7 +7,7 @@ import { ExperienceCard } from './components/ExperienceCard';
 import { ProjectMiniCard } from './components/ProjectMiniCard';
 import { QuickLinks } from './components/QuickLinks';
 import { VolunteeringCard } from './components/VolunteeringCard';
-import { CatCard } from './components/CatCard';
+import { CatsCard } from './components/CatCard';
 import { ProjectModal } from './components/ProjectModal';
 import { TechCarousel } from './components/TechCarousel';
 import { AiChatCard } from './components/AiChatCard';
@@ -195,16 +195,16 @@ const App: React.FC = () => {
     {
       id: 'volunteering',
       category: 'life',
-      colSpan: 'md:col-span-6 lg:col-span-6',
-      rowSpan: 'lg:row-span-2',
+      colSpan: 'md:col-span-3 lg:col-span-3',
+      rowSpan: 'lg:row-span-3',
       render: (rel) => <div className={`h-full transition-all duration-500 ${rel < 10 ? 'opacity-30 blur-[1px]' : ''}`}><VolunteeringCard /></div>
     },
     {
       id: 'cat',
       category: 'life',
-      colSpan: 'md:col-span-6 lg:col-span-6',
+      colSpan: 'md:col-span-3 lg:col-span-3',
       rowSpan: 'lg:row-span-3',
-      render: (rel) => <div className={`h-full transition-all duration-500 ${rel < 10 ? 'opacity-30 blur-[1px]' : ''}`}><CatCard /></div>
+      render: (rel) => <div className={`h-full transition-all duration-500 ${rel < 10 ? 'opacity-30 blur-[1px]' : ''}`}><CatsCard /></div>
     }
   ];
 

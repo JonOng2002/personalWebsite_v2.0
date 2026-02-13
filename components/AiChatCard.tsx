@@ -1,14 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { GoogleGenAI } from "@google/genai";
-
-const SYSTEM_INSTRUCTION = `You are Jonathan's AI assistant... [truncated for brevity, keep existing logic]`;
-
-const SUGGESTIONS = [
-  "What is your 2026 availability?",
-  "Tell me about your YTL internship.",
-  "Describe the RAG project metrics.",
-  "What are your core DevOps skills?"
-];
 
 type MessageRole = 'user' | 'ai';
 interface ChatMessage { role: MessageRole; text: string; }
@@ -32,14 +22,22 @@ export const AiChatCard: React.FC = () => {
     setMessages(prev => [...prev, { role: 'user', text: userMessage }]);
     setIsTyping(true);
     try {
-      const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
-      const response = await ai.models.generateContent({
-        model: 'gemini-3-flash-preview',
-        contents: [{ role: 'user', parts: [{ text: userMessage }] }],
-        config: { systemInstruction: "Answer concisely as Jonathan's assistant. Metric-driven.", temperature: 0.4 },
+      const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ userMessage }),
       });
-      setMessages(prev => [...prev, { role: 'ai', text: response.text || "I'm not sure about that." }]);
+
+      if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setMessages(prev => [...prev, { role: 'ai', text: data.text || "I'm not sure about that." }]);
     } catch (e) {
+      console.error("Failed to fetch from /api/chat:", e);
       setMessages(prev => [...prev, { role: 'ai', text: "Connectivity issue. Please try again." }]);
     } finally { setIsTyping(false); }
   };

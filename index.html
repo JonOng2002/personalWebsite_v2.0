@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jonathan Ong | DevOps & AI Engineer</title>
+    
+    <!-- Dynamic Favicon -->
+    <link id="favicon" rel="icon" href="/favicon-96x96.png" type="image/png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -165,6 +171,36 @@
           to { transform: rotate(360deg); }
         }
     </style>
+    
+    <script>
+      (function() {
+        const favicon = document.getElementById('favicon');
+        if (!favicon) return;
+
+        const lightIcon = '/favicon-light.png';
+        const darkIcon = '/favicon-96x96.png';
+
+        const updateFavicon = () => {
+          const isDark = document.documentElement.classList.contains('dark');
+          favicon.setAttribute('href', isDark ? darkIcon : lightIcon);
+        };
+
+        const observer = new MutationObserver((mutations) => {
+          for (const mutation of mutations) {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+              updateFavicon();
+              break;
+            }
+          }
+        });
+
+        observer.observe(document.documentElement, { attributes: true });
+
+        // Set initial state
+        updateFavicon();
+      })();
+    </script>
+    
 <script type="importmap">
 {
   "imports": {

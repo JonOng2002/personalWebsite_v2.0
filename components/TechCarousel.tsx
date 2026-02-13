@@ -10,7 +10,6 @@ const TECH_LIST = [
   { id: 'python', name: 'Python' },
   { id: 'typescript', name: 'TS' },
   { id: 'llama', name: 'Llama' },
-  { id: 'fastapi', name: 'FastAPI' },
   { id: 'react', name: 'React' },
   { id: 'postgresql', name: 'SQL' },
   { id: 'bash', name: 'Bash' },
@@ -31,20 +30,24 @@ export const TechCarousel: React.FC = () => {
           {displayList.map((tech, idx) => (
             <div 
               key={`${tech.id}-${idx}`} 
-              className="flex-shrink-0 flex items-center gap-3 px-5 py-3 bg-white dark:bg-gray-900 rounded-2xl border border-slate-100 dark:border-gray-800 group/icon hover:border-[color:var(--primary)]/30 transition-all shadow-sm"
+              className="flex-shrink-0 flex items-center justify-center w-20 h-20 bg-white dark:bg-gray-900 rounded-2xl border border-slate-100 dark:border-gray-800 group/icon hover:border-[color:var(--primary)]/30 transition-all shadow-sm"
               title={tech.name}
             >
-              <img 
-                src={`/logos/${tech.id}.png`} 
-                alt={tech.name}
-                className="h-6 w-6 object-contain grayscale group-hover/icon:grayscale-0 transition-all transform group-hover/icon:scale-110"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.style.display = 'none';
-                  target.nextElementSibling?.setAttribute('style', 'display: flex');
-                }}
-              />
-              <span className="text-[11px] font-bold text-slate-500 dark:text-gray-400 group-hover/icon:text-[color:var(--primary)] transition-colors uppercase tracking-widest">{tech.name}</span>
+              <div className="relative h-12 w-12">
+                <img 
+                  src={`/logos/${tech.id}.png`} 
+                  alt={tech.name}
+                  className="h-full w-full object-contain"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    if (!target.src.endsWith('.jpg')) {
+                      target.src = `/logos/${tech.id}.jpg`;
+                    } else {
+                      target.style.display = 'none';
+                    }
+                  }}
+                />
+              </div>
             </div>
           ))}
         </div>
