@@ -4,6 +4,9 @@ A bento-grid portfolio site built with React + TypeScript + Vite. The layout is 
 
 Live site: jonongca.com
 
+<img width="1601" height="936" alt="image" src="https://github.com/user-attachments/assets/e751940a-de23-4217-8c6b-59b83d01d3c7" />
+
+
 ## What this project does
 - Renders a bento-style grid of cards for projects, experience, and interactive widgets.
 - Uses a consistent design system (Tailwind + reusable components) for spacing, typography, and dark mode styling.
