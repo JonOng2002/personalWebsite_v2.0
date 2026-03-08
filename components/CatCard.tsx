@@ -20,25 +20,20 @@ export const CatsCard: React.FC = () => {
         </div>
       </div>
 
-      {/* Dark gradient overlay — fades in on hover for text legibility */}
-      <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      {/* Dark gradient overlay — fades in on hover */}
+      <div className="absolute inset-0 z-10 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-      {/* Label pill — always visible */}
-      <div className="absolute top-4 left-4 z-20">
-        <div className="bg-white/90 dark:bg-emerald-900/80 backdrop-blur-md text-zinc-800 dark:text-emerald-300 text-[10px] font-bold px-3 py-1.5 rounded-full tracking-[0.1em] uppercase shadow-sm border border-zinc-200 dark:border-emerald-500/30">
-          The Cats
+      {/* Slick Bottom Button on Hover */}
+      <div className="absolute bottom-6 left-6 z-20 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out">
+        <div className="flex items-center gap-2 bg-black/60 backdrop-blur-xl border border-white/10 px-4 py-2 rounded-full shadow-2xl">
+          <span className="text-sm font-bold text-white tracking-tight font-display">
+            Timmy & Yuumi
+          </span>
+          <svg className="w-3.5 h-3.5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+          </svg>
         </div>
       </div>
-
-      {/* Hover text content */}
-      <div className="relative z-20 translate-y-12 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out">
-        <h4 className="font-bold text-white text-2xl font-display drop-shadow-md">Timmy & Yuumi</h4>
-        <p className="text-[12px] text-emerald-300 font-bold uppercase tracking-wider font-display drop-shadow-md">My Daily Motivation</p>
-        <p className="text-white/80 text-xs leading-relaxed mt-2">
-          Timmy is an American Curl tabby. Yuumi is a rescued tripod. They've been with me through the highs and lows!
-        </p>
-      </div>
-
     </div>
   );
 };

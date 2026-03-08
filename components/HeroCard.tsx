@@ -11,10 +11,10 @@ export const HeroCard: React.FC = () => {
       </div>
 
       {/* Name and Title */}
-      <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 font-display">
+      <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-white font-display mb-2">
         Jonathan Ong
       </h1>
-      <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400 mt-1 mb-6">
+      <p className="text-[12px] font-semibold text-emerald-600 dark:text-emerald-400/70 uppercase tracking-widest mb-8">
         DevOps Engineer Intern @ YTL PowerSeraya
       </p>
 

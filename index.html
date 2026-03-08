@@ -14,9 +14,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@600;700;800&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap"
-    rel="stylesheet">
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -43,9 +40,9 @@
             }
           },
           fontFamily: {
-            display: ['Instrument Sans', 'sans-serif'],
-            sans: ['Inter', 'sans-serif'],
-            mono: ['Fira Code', 'monospace'],
+            display: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', '"SF Pro Text"', '"Helvetica Neue"', 'Helvetica', 'Arial', 'sans-serif'],
+            sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Text"', '"Helvetica Neue"', 'Helvetica', 'Arial', 'sans-serif'],
+            mono: ['"SF Mono"', '"Monaco"', '"Menlo"', '"Courier New"', 'monospace'],
           },
           animation: {
             'scroll': 'scroll 20s linear infinite',
@@ -122,7 +119,7 @@
     h3,
     h4,
     .font-display {
-      font-family: 'Instrument Sans', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
     }
 
     .glass {
@@ -182,6 +179,67 @@
         transform: rotate(360deg);
       }
     }
+
+    /* Grid System Core */
+    .react-grid-layout {
+      position: relative;
+      transition: height 200ms ease;
+    }
+
+    .react-grid-item {
+      transition: all 200ms ease;
+      transition-property: left, top;
+    }
+
+    .react-grid-item.cssTransforms {
+      transition-property: transform;
+    }
+
+    .react-grid-item.resizing {
+      z-index: 1000;
+      will-change: width, height;
+    }
+
+    .react-grid-item.react-draggable-dragging {
+      transition: none !important;
+      z-index: 3000 !important;
+      will-change: left, top, transform;
+    }
+
+    .react-grid-item.dropping {
+      visibility: hidden;
+    }
+
+    /* Grid Placeholder (Drop Target) */
+    .react-grid-placeholder {
+      background: rgba(16, 185, 129, 0.05) !important;
+      border: 1.5px dashed rgba(16, 185, 129, 0.25) !important;
+      border-radius: 20px !important;
+      opacity: 1 !important;
+      z-index: 5 !important;
+      transition: all 450ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    .dark .react-grid-placeholder {
+      background: rgba(6, 78, 59, 0.1) !important;
+      border-color: rgba(16, 185, 129, 0.2) !important;
+    }
+
+    /* Eric Wu Smoothness */
+    .react-grid-item {
+      transition: transform 450ms cubic-bezier(0.16, 1, 0.3, 1),
+        width 450ms cubic-bezier(0.16, 1, 0.3, 1),
+        height 450ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .layout-initializing .react-grid-item {
+      transition: none !important;
+    }
+
+    /* Hide native handles, we have our own glass cards */
+    .react-resizable-handle {
+      display: none !important;
+    }
   </style>
 
   <script>
@@ -224,7 +282,6 @@
   }
 }
 </script>
-  <link rel="stylesheet" href="/index.css">
 </head>
 
 <body class="font-sans">

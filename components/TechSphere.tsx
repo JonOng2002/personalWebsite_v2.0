@@ -56,11 +56,9 @@ function rotateX([x, y, z]: [number, number, number], a: number): [number, numbe
 export const TechSphere: React.FC = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const anglesRef = useRef({ y: 0, x: 0.3 });
-    const mouseVelRef = useRef({ dy: 0, dx: 0 });
-    const isDraggingRef = useRef(false);
-    const lastMouseRef = useRef({ x: 0, y: 0 });
+    const targetVelRef = useRef({ y: 0.004, x: 0 });
     const rafRef = useRef<number | null>(null);
-    const radiusRef = useRef(100); // updated by ResizeObserver
+    const radiusRef = useRef(100);
 
     const basePoints = spherePoints(ICONS.length);
 
@@ -68,7 +66,6 @@ export const TechSphere: React.FC = () => {
         const container = containerRef.current;
         if (!container) return;
 
-        // ── Recalculate radius whenever the container resizes ────────────────────
         const ro = new ResizeObserver(() => {
             const { width, height } = container.getBoundingClientRect();
             radiusRef.current = Math.min(width, height) * 0.38;
@@ -78,12 +75,9 @@ export const TechSphere: React.FC = () => {
         const items = Array.from(container.querySelectorAll<HTMLElement>('.sphere-item'));
 
         const render = () => {
-            if (!isDraggingRef.current) {
-                anglesRef.current.y += 0.004 + mouseVelRef.current.dy * 0.02;
-                anglesRef.current.x += mouseVelRef.current.dx * 0.02;
-                mouseVelRef.current.dy *= 0.92;
-                mouseVelRef.current.dx *= 0.92;
-            }
+            // Smoothly interpolate towards target velocity
+            anglesRef.current.y += targetVelRef.current.y;
+            anglesRef.current.x += targetVelRef.current.x;
 
             const { y: ay, x: ax } = anglesRef.current;
             const R = radiusRef.current;
@@ -92,7 +86,7 @@ export const TechSphere: React.FC = () => {
                 let [rx, ry, rz] = rotateY([px, py, pz], ay);
                 [rx, ry, rz] = rotateX([rx, ry, rz], ax);
 
-                const depth = (rz + 2) / 3;        // 0.33 … 1
+                const depth = (rz + 2) / 3;
                 const opacity = Math.max(0.12, depth);
                 const el = items[i];
                 if (!el) return;
@@ -106,57 +100,45 @@ export const TechSphere: React.FC = () => {
         };
         rafRef.current = requestAnimationFrame(render);
 
-        // ── Drag interaction ─────────────────────────────────────────────────────
-        const onDown = (e: MouseEvent | TouchEvent) => {
-            isDraggingRef.current = true;
-            const pos = 'touches' in e ? e.touches[0] : e;
-            lastMouseRef.current = { x: pos.clientX, y: pos.clientY };
-        };
-        const onMove = (e: MouseEvent | TouchEvent) => {
-            if (!isDraggingRef.current) return;
-            const pos = 'touches' in e ? e.touches[0] : e;
-            const dx = pos.clientX - lastMouseRef.current.x;
-            const dy = pos.clientY - lastMouseRef.current.y;
-            anglesRef.current.y += dx * 0.006;
-            anglesRef.current.x += dy * 0.006;
-            mouseVelRef.current = { dy: dx * 0.5, dx: dy * 0.5 };
-            lastMouseRef.current = { x: pos.clientX, y: pos.clientY };
-        };
-        const onUp = () => { isDraggingRef.current = false; };
+        const onMouseMove = (e: MouseEvent) => {
+            const rect = container.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
 
-        container.addEventListener('mousedown', onDown);
-        window.addEventListener('mousemove', onMove);
-        window.addEventListener('mouseup', onUp);
-        container.addEventListener('touchstart', onDown, { passive: true });
-        window.addEventListener('touchmove', onMove, { passive: true });
-        window.addEventListener('touchend', onUp);
+            // Calculate distance from center (-1 to 1)
+            const dx = (e.clientX - centerX) / (rect.width / 2);
+            const dy = (e.clientY - centerY) / (rect.height / 2);
+
+            // Set target rotation speed based on position
+            targetVelRef.current = {
+                y: dx * 0.05 + 0.004, // Add base rotation
+                x: -dy * 0.05
+            };
+        };
+
+        const onMouseLeave = () => {
+            targetVelRef.current = { y: 0.004, x: 0 };
+        };
+
+        container.addEventListener('mousemove', onMouseMove);
+        container.addEventListener('mouseleave', onMouseLeave);
 
         return () => {
             ro.disconnect();
             if (rafRef.current) cancelAnimationFrame(rafRef.current);
-            container.removeEventListener('mousedown', onDown);
-            window.removeEventListener('mousemove', onMove);
-            window.removeEventListener('mouseup', onUp);
-            container.removeEventListener('touchstart', onDown);
-            window.removeEventListener('touchmove', onMove);
-            window.removeEventListener('touchend', onUp);
+            container.removeEventListener('mousemove', onMouseMove);
+            container.removeEventListener('mouseleave', onMouseLeave);
         };
     }, []);
 
     return (
-        <div className="glass rounded-[2rem] p-6 flex flex-col h-full relative overflow-hidden bg-white dark:bg-[#0c1a10] shadow-sm hover:shadow-xl transition-all duration-300 min-h-[360px]">
-            {/* Header */}
-            <div className="flex items-center justify-between mb-1 relative z-30 shrink-0">
-                <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-700/60 dark:text-emerald-600/50">
-                    Technology Stack
-                </h4>
-                <div className="h-1 w-6 bg-emerald-500/20 rounded-full" />
-            </div>
+        <div className="glass rounded-[2rem] p-6 flex flex-col h-full relative overflow-hidden bg-white dark:bg-[#0c1a10] shadow-sm hover:shadow-xl transition-all duration-300">
+
 
             {/* Sphere stage — flex-1 so it fills the remaining card height */}
             <div
                 ref={containerRef}
-                className="flex-1 relative select-none cursor-grab active:cursor-grabbing"
+                className="flex-1 relative select-none cursor-grab active:cursor-grabbing no-drag"
             >
                 {ICONS.map((icon) => (
                     <div
@@ -185,7 +167,7 @@ export const TechSphere: React.FC = () => {
 
             {/* Hint */}
             <p className="text-center text-[9px] text-emerald-700/25 dark:text-emerald-600/25 font-mono uppercase tracking-widest shrink-0 relative z-30">
-                drag to rotate
+                hover to rotate
             </p>
         </div>
     );
